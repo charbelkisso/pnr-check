@@ -1,8 +1,22 @@
+enum personalNumberStatus {
+    Valid = "Valid",
+    Invalid = "Invalid"
+}
 
+export interface responseMessage {
+    personalNumber: string;
+    Year?: number;
+    month?: number;
+    day?: number;
+    control?: number;
+    status: personalNumberStatus;
+    text: string;
+}
 
 export default class PersonalNumber {
 
     private _personalNumber: string;
+    private _resMessage: responseMessage;
 
     /**
      * 
@@ -10,57 +24,63 @@ export default class PersonalNumber {
      */
     constructor(pNumber: string) {
         this._personalNumber = pNumber;
+        this._resMessage = {
+            personalNumber: this._personalNumber,
+            status: personalNumberStatus.Valid,
+            text: "personal number OK!"
+        }
     }
 
-    
-    public get personalNumber() : string {
+    public get personalNumber(): string {
         return this._personalNumber;
     }
-    
-    
-    public set personalNumber(v : string) {
+
+    public set personalNumber(v: string) {
         this._personalNumber = v;
     }
-    
-    /**
-     * GetYear
-     */
-    public GetYear(): number {
-        return (this._personalNumber.length > 10) ? Number.parseInt(this._personalNumber.substring(0, 3)) :
-            Number.parseInt(this._personalNumber.substring(0, 1))
+
+    private checkLength(): boolean {
+        return (this._personalNumber.length == 12) ? true : false;
     }
 
-    /**
-     * CheckYear
-     */
-    public CheckYear(): boolean {
+    private getYear(): number {
+        return Number.parseInt(this._personalNumber.substring(0, 4));
+    }
+
+    private getMonth(): number {
+        return Number.parseInt(this._personalNumber.substring(4, 6));
+    }
+
+    private getDay(): number {
+        return Number.parseInt(this._personalNumber.substring(6, 8));
+    }
+
+    private checkYear(): boolean {
+        let minYear = 1900,
+            maxYear = new Date(Date.now()).getFullYear(),
+            currYear = this.getYear();
+
+        return (currYear > minYear && currYear <= maxYear);
+    }
+
+    private checkMonth(): boolean {
+        return (this.getMonth() in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    }
+
+    private checkDay(): boolean {
         return false;
     }
 
-    /**
-     * GetMonth
-     */
-    public GetMonth(): number {
-        return 0;
+    private checkControl(): boolean {
+        return false;
     }
 
+    public checkPersonalNumber(): responseMessage {
 
-
-    public CheckPersonalNumber(): boolean {
-        
-        /** 
-         * TODO:
-         * ======================
-         * 1. Get year
-         * 2. Check the year
-         * 3. Get Month
-         * 4. Check the month
-         * 5. Get day
-         * 6. Check the day
-         * 7. Check Control number
-         *
-         */
-
-        return false;
+        if (!this.checkLength()) {
+            this._resMessage.status = personalNumberStatus.Invalid;
+            this._resMessage.text = "Invalid Length";
+        }
+        return this._resMessage;
     }
 }
