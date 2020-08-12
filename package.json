@@ -11,8 +11,7 @@
     "start": "run-s build start:direct",
     "watch": "nodemon ./dist/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Charbel Kisso",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
