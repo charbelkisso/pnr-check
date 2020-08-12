@@ -80,7 +80,27 @@ export default class PersonalNumber {
     }
 
     private checkControl(): boolean {
-        return false;
+
+        let control = Number.parseInt(this._personalNumber.charAt(11));
+        let factor = 2;
+
+        let acc = this._personalNumber
+            .trim()
+            .substring(2, 11)
+            .split("")
+            .map(char => Number.parseInt(char))
+            .reduce((accum: number, num: number) => {
+                num = num * factor;
+                if (num >= 10) {
+                    let first = Math.trunc(num / 10);
+                    let second = num % 10;
+                    num = first + second;
+                }
+                factor = (factor == 2) ? 1 : 2;
+                return accum + num;
+            }, 0);
+
+        return (control == (10 - (acc % 10)));
     }
 
     public checkPersonalNumber(): responseMessage {
