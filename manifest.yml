@@ -1,0 +1,8 @@
+---
+applications:
+- name: pnrtest
+  buildpacks:
+  - nodejs_buildpack
+  random-route: true
+  services:
+  - pnr-autoscaler
