@@ -1,4 +1,4 @@
-enum personalNumberStatus {
+export enum personalNumberStatus {
     Valid = "Valid",
     Invalid = "Invalid"
 }
