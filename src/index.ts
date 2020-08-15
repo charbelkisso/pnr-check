@@ -1,16 +1,21 @@
 import * as express from 'express';
-import PersonalNumber, { responseMessage, personalNumberStatus } from './PersonalNumber';
+import { config } from 'dotenv';
+import PersonalNumber from './PersonalNumber';
+
 const app = express();
 const port = process.env.PORT || 8080;
+config();
 
 app.get('/pnrcheck/:pnr', (req: express.Request, res: express.Response) => {
     let pnr = new PersonalNumber(req.params['pnr']);
     let responseMessage = pnr.checkPersonalNumber();
 
-    if (responseMessage.status === personalNumberStatus.Valid)
-        res.status(200).json(responseMessage);
+    if (!responseMessage && responseMessage === null)
+        res.status(500).json({
+            error: "Internal Error!"
+        });
     else
-        res.status(500).json(responseMessage)
+        res.status(200).json(responseMessage)
 });
 
 
