@@ -1,8 +1,10 @@
 ---
 applications:
-- name: pnrtest
+- name: pnr-check
   buildpacks:
   - nodejs_buildpack
   random-route: true
+  memory: 512MB
+  disk_quota: 256MB
   services:
   - pnr-autoscaler
