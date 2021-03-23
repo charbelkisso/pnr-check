@@ -16,6 +16,7 @@ export interface responseMessage {
 
 export default class PersonalNumber {
 
+    // Class members
     private _personalNumber: string;
     private _resMessage: responseMessage;
 
@@ -32,6 +33,7 @@ export default class PersonalNumber {
         }
     }
 
+
     public get personalNumber(): string {
         return this._personalNumber;
     }
@@ -40,50 +42,39 @@ export default class PersonalNumber {
         this._personalNumber = v;
     }
 
-    private checkLength(): boolean {
-        return (this._personalNumber.length == 12) ? true : false;
-    }
+    /**
+     * @private
+     * private method for internal usage checks the length of personal number
+     * @returns {boolean} returns true if the string lenght match personal number lenght, otherwise returns flase
+     */
 
-    private getYear(): number {
-        return Number.parseInt(this._personalNumber.substring(0, 4));
-    }
+    private checkLength = (): Boolean => this._personalNumber.length === 12 ? true : false;
 
-    private getMonth(): number {
-        return Number.parseInt(this._personalNumber.substring(4, 6));
-    }
+    private getYear = (): number => Number.parseInt(this._personalNumber.substring(0, 4));
 
-    private getDay(): number {
-        return Number.parseInt(this._personalNumber.substring(6, 8));
-    }
+    private getMonth = (): number => Number.parseInt(this._personalNumber.substring(4, 6));
 
-    private getControl(): number {
-        return Number.parseInt(this._personalNumber.substring(8));
-    }
+    private getDay = (): number => Number.parseInt(this._personalNumber.substring(6, 8));
+
+    private getControl = (): number => Number.parseInt(this._personalNumber.substring(8));
+
     private checkYear(): boolean {
         let minYear = 1900,
             maxYear = new Date(Date.now()).getFullYear(),
             currYear = this.getYear();
-
         return (currYear > minYear && currYear <= maxYear);
     }
-
-    private checkMonth(): boolean {
-        return (this.getMonth() in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-    }
+    private checkMonth = (): boolean => (this.getMonth() in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
     private checkDay(): boolean {
-
         let lastDay = new Date(this.getYear(), this.getMonth(), 0).getDate(),
             currDay = this.getDay();
-
         return (currDay >= 1 && currDay < lastDay);
     }
 
     private checkControl(): boolean {
-
         let control = Number.parseInt(this._personalNumber.charAt(11));
         let factor = 2;
-
         let acc = this._personalNumber
             .trim()
             .substring(2, 11)
@@ -99,7 +90,6 @@ export default class PersonalNumber {
                 factor = (factor == 2) ? 1 : 2;
                 return accum + num;
             }, 0);
-
         return (control == (10 - (acc % 10)));
     }
 
