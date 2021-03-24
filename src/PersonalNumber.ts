@@ -1,6 +1,6 @@
 export enum personalNumberStatus {
     Valid = "Valid",
-    Invalid = "Invalid"
+    Invalid = "Invalid",
 }
 
 export interface responseMessage {
@@ -15,13 +15,12 @@ export interface responseMessage {
 }
 
 export default class PersonalNumber {
-
     // Class members
     private _personalNumber: string;
     private _resMessage: responseMessage;
 
     /**
-     * 
+     *
      * @param pNumber Personal Numer in string format
      */
     constructor(pNumber: string) {
@@ -29,10 +28,9 @@ export default class PersonalNumber {
         this._resMessage = {
             personalNumber: this._personalNumber,
             status: personalNumberStatus.Valid,
-            text: "personal number OK!"
-        }
+            text: "personal number OK!",
+        };
     }
-
 
     public get personalNumber(): string {
         return this._personalNumber;
@@ -48,28 +46,34 @@ export default class PersonalNumber {
      * @returns {boolean} returns true if the string lenght match personal number lenght, otherwise returns flase
      */
 
-    private checkLength = (): Boolean => this._personalNumber.length === 12 ? true : false;
+    private checkLength = (): Boolean =>
+        this._personalNumber.length === 12 ? true : false;
 
-    private getYear = (): number => Number.parseInt(this._personalNumber.substring(0, 4));
+    private getYear = (): number =>
+        Number.parseInt(this._personalNumber.substring(0, 4));
 
-    private getMonth = (): number => Number.parseInt(this._personalNumber.substring(4, 6));
+    private getMonth = (): number =>
+        Number.parseInt(this._personalNumber.substring(4, 6));
 
-    private getDay = (): number => Number.parseInt(this._personalNumber.substring(6, 8));
+    private getDay = (): number =>
+        Number.parseInt(this._personalNumber.substring(6, 8));
 
-    private getControl = (): number => Number.parseInt(this._personalNumber.substring(8));
+    private getControl = (): number =>
+        Number.parseInt(this._personalNumber.substring(8));
 
     private checkYear(): boolean {
         let minYear = 1900,
             maxYear = new Date(Date.now()).getFullYear(),
             currYear = this.getYear();
-        return (currYear > minYear && currYear <= maxYear);
+        return currYear > minYear && currYear <= maxYear;
     }
-    private checkMonth = (): boolean => (this.getMonth() in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    private checkMonth = (): boolean =>
+        this.getMonth() in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
     private checkDay(): boolean {
         let lastDay = new Date(this.getYear(), this.getMonth(), 0).getDate(),
             currDay = this.getDay();
-        return (currDay >= 1 && currDay < lastDay);
+        return currDay >= 1 && currDay < lastDay;
     }
 
     private checkControl(): boolean {
@@ -79,7 +83,7 @@ export default class PersonalNumber {
             .trim()
             .substring(2, 11)
             .split("")
-            .map(char => Number.parseInt(char))
+            .map((char) => Number.parseInt(char))
             .reduce((accum: number, num: number) => {
                 num = num * factor;
                 if (num >= 10) {
@@ -87,14 +91,13 @@ export default class PersonalNumber {
                     let second = num % 10;
                     num = first + second;
                 }
-                factor = (factor == 2) ? 1 : 2;
+                factor = factor == 2 ? 1 : 2;
                 return accum + num;
             }, 0);
-        return (control == (10 - (acc % 10)));
+        return control == 10 - (acc % 10);
     }
 
     public checkPersonalNumber(): responseMessage {
-
         if (!this.checkLength()) {
             this._resMessage.status = personalNumberStatus.Invalid;
             this._resMessage.text = "Invalid Length";
@@ -142,8 +145,8 @@ export default class PersonalNumber {
             day: this.getDay(),
             length: this._personalNumber.length,
             month: this.getMonth(),
-            year: this.getYear()
-        }
+            year: this.getYear(),
+        };
         return this._resMessage;
     }
 }
